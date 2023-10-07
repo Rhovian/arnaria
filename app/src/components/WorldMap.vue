@@ -1,7 +1,7 @@
 <!-- WorldMap.vue -->
 
 <template>
-  <div id="map" :style="{ width: '100%', height: '500px' }"></div>
+  <div id="map" :style="{ width: '100%', height: '100%' }"></div>
 </template>
 
 <script setup lang="ts">
@@ -23,9 +23,12 @@ onMounted(() => {
     const mapContainer = document.getElementById('map');
     const map = L.map(mapContainer).setView([51.505, -0.09], 13);
     
-    // Add tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
+        subdomains: 'abcd',
+        minZoom: 3,
+        maxZoom: 9,
+        ext: 'jpg'
     }).addTo(map);
     
     // Use leaflet-pixi-overlay to add the Pixi app as an overlay
