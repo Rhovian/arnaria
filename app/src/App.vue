@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { inject } from 'vue'
 import WorldMap from './components/WorldMap.vue'
-
-// Inject Pixi app
-const app = inject('pixiApp')
+import MapTest from './components/MapTest.vue'
 </script>
 
 <template>
+  <MapTest />
   <WorldMap />
 </template>

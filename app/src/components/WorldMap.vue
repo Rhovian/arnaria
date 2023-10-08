@@ -5,18 +5,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, provide } from 'vue'
-import { Application } from 'pixi.js'
+import { onMounted } from 'vue'
+import { Container } from 'pixi.js'
+import { store } from '../store'
 import 'leaflet-pixi-overlay'
 import 'leaflet/dist/leaflet.css';
-
-// Create a new Pixi application
-const pixiApp = new Application({
-    antialias: true,
-});
-
-// Provide the Pixi app globally
-provide('pixiApp', pixiApp);
 
 onMounted(() => {
     // Init the Leaflet map
@@ -26,17 +19,29 @@ onMounted(() => {
     L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
         attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
         subdomains: 'abcd',
-        minZoom: 3,
-        maxZoom: 9,
+        minZoom: 1,
+        maxZoom: 16,
         ext: 'jpg'
     }).addTo(map);
+
+    const container = new Container();
     
     // Use leaflet-pixi-overlay to add the Pixi app as an overlay
-    const overlay = L.pixiOverlay(() => {
-        // Drawing sprites or other Pixi objects can be done here
-    }, pixiApp.stage);
+    const overlay = L.pixiOverlay((utils) => {
+        store.actions.setUtils(utils);
+
+        // Update sprites on the map based on map interactions (zoom/pan)
+        const scale = utils.getScale();
+        const container = utils.getContainer();
+        const renderer = utils.getRenderer();
+
+        console.log('added child to container')
+        renderer.render(container);
+    }, container);
 
     overlay.addTo(map);
+    store.actions.setOverlay(overlay);
+    store.actions.setMap(map);
 });
 
 </script>
