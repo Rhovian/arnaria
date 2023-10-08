@@ -15,9 +15,6 @@
         Clicked Location: {{ lat }}, {{ lng }}
       </div>
       <div>
-        <button @click="handleRedrawOverlay">Redraw Overlay</button>
-      </div>
-      <div>
         <button @click="handleSetupClick">Setup Click Listener</button>
         <button @click="handleRemoveClick">Remove Click Listener</button>
       </div>
@@ -37,7 +34,6 @@ import {
 import * as PIXI from 'pixi.js'
 
 const app = computed(() => store.pixiApp)
-const overlay = computed(() => store.overlay)
 const map = computed(() => store.map)
 const utils = computed(() => store.utils)
 const lat = ref(51.505)
@@ -48,16 +44,15 @@ watchEffect(() => {
         lat.value = store.targetLatLng.lat
         lng.value = store.targetLatLng.lng
     }
-
-    console.log(overlay.value)
 })
 
 const clickedLatLng = ref<null | { lat: number, lng: number }>(null)
 let lastSprite: PIXI.Sprite | null = null
 
 const handleDraw = async () => {
-    const markerTexture = await PIXI.Assets.load('/images/marker.png');  // <-- Updated loading of textures
-    drawSprite(store.utils, lat.value, lng.value, markerTexture )
+    const markerTexture = await PIXI.Assets.load('/images/marker.png');
+    const marker = PIXI.Sprite.from(markerTexture); 
+    drawSprite(store.utils, [lat.value, lng.value], marker)
 };
 
 const handleRemoveSprite = () => {
@@ -81,10 +76,6 @@ const handleSetupClick = () => {
 
 const handleRemoveClick = () => {
     map.value.off('click');  // <-- Remove click listener
-}
-
-const handleRedrawOverlay = () => {
-    overlay.value.redraw(); // <-- Force a redraw of the overlay
 }
 
 </script>

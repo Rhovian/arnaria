@@ -35,7 +35,10 @@ onMounted(() => {
         const container = utils.getContainer();
         const renderer = utils.getRenderer();
 
-        console.log('added child to container')
+        container.children.forEach(child => {
+            child.scale.set(1 / scale); 
+        });
+
         renderer.render(container);
     }, container);
 
@@ -47,9 +50,8 @@ onMounted(() => {
 </script>
 
 <style>
-#app {
-    width: 100vw;
-    height: 100vh;
-}
-/* Add any necessary CSS here */
+    #app {
+        width: 100vw;
+        height: 100vh;
+    }
 </style>

@@ -1,0 +1,10 @@
+{
+  "name": "arnaria",
+  "version": "0.0.1",
+  "repository": "https://github.com/Rhovian/arnaria.git",
+  "author": "rhovian <atomicjab@proton.me>",
+  "license": "MIT",
+  "scripts": {
+    "dev:app": "cd app && yarn dev"
+  }
+}
