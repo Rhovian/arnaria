@@ -2,6 +2,36 @@ import { LatLngLiteral } from 'leaflet';
 import * as PIXI from 'pixi.js';
 import * as L from 'leaflet';
 
+export function drawCircle(
+    utils: any,
+    latLng: [number, number],
+    radius: number,
+    child?: PIXI.Graphics,
+) {
+    try {
+        const circle = child || new PIXI.Graphics();
+        const container = utils.getContainer();
+        const project = utils.latLngToLayerPoint;
+        const renderer = utils.getRenderer();
+        const projectedCircle = project(latLng);
+        const scale = utils.getScale();
+
+        if (!child) container.addChild(circle);
+        circle.clear();
+        circle.name = 'circle';
+        circle.lineStyle(2 / scale, '#2edaff');
+        circle.beginFill('#ADD8E6', 0.5);
+        console.log('projected info:', projectedCircle.x, projectedCircle.y, radius)
+        circle.drawCircle(projectedCircle.x, projectedCircle.y, radius);
+        circle.endFill();
+
+        renderer.render(container);
+
+    } catch (e) {
+        console.error('drawCircle error: ', e);
+    }
+}
+
 // Utility to draw a specific sprite on the map
 export function drawSprite(
     utils: any,

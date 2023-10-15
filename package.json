@@ -5,6 +5,6 @@
   "author": "rhovian <atomicjab@proton.me>",
   "license": "MIT",
   "scripts": {
-    "dev:app": "cd app && yarn dev"
+    "app:dev": "cd app && yarn dev"
   }
 }

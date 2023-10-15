@@ -26,7 +26,7 @@
 import { ref, computed, watchEffect } from 'vue'
 import { store } from '../store'
 import { 
-    drawSprite,
+    drawCircle,
     removeSprite,
     setupClickListener,
     removeClickListener
@@ -52,7 +52,7 @@ let lastSprite: PIXI.Sprite | null = null
 const handleDraw = async () => {
     const markerTexture = await PIXI.Assets.load('/images/marker.png');
     const marker = PIXI.Sprite.from(markerTexture); 
-    drawSprite(store.utils, [lat.value, lng.value], marker)
+    drawCircle(store.utils, [lat.value, lng.value], 10)
 };
 
 const handleRemoveSprite = () => {
