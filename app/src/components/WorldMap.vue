@@ -16,13 +16,13 @@ onMounted(() => {
     // Init the Leaflet map
     const prevZoom = ref(13); // <-- Added state to track previous zoom level
     const mapContainer = document.getElementById('map');
-    const map = L.map(mapContainer).setView([51.505, -0.09], 14);
+    const map = L.map(mapContainer).setView([51.505, -0.09], 8);
     
     L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
         attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
         subdomains: 'abcd',
         minZoom: 2,
-        maxZoom: 16,
+        maxZoom: 8,
         ext: 'jpg'
     }).addTo(map);
 
@@ -30,6 +30,7 @@ onMounted(() => {
     
     // Use leaflet-pixi-overlay to add the Pixi app as an overlay
     const overlay = L.pixiOverlay((utils) => {
+        console.log(prevZoom.value)
         store.actions.setUtils(utils);
 
         // Update sprites on the map based on map interactions (zoom/pan)

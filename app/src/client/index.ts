@@ -1,0 +1,1 @@
+export { castleInstance } from './CastleInstance';

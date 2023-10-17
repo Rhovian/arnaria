@@ -14,7 +14,6 @@ export function drawCircle(
         const project = utils.latLngToLayerPoint;
         const renderer = utils.getRenderer();
         const projectedCircle = project(latLng);
-        const scale = utils.getScale();
 
         if (!child) container.addChild(circle);
         circle.clear();
@@ -83,4 +82,30 @@ export function removeClickListener(map: L.Map, callback: (latlng: LatLngLiteral
     map.off('click', function(e) {
         callback(extractGeoJSONFromClickEvent(e));
     });
+}
+
+export const findMarker = (utils: any, ll: [number, number]) => {
+    console.log('findMarker utils:', utils, 'll:', ll)
+    const project = utils.latLngToLayerPoint;
+    const zoom = utils.getMap().getZoom();
+    const quadTrees = utils.getQuadTrees();
+    const layerPoint = project(ll);
+    const quadTree = quadTrees[zoom];
+    let marker;
+    const rMax = quadTree.rMax;
+    let found = false;
+    // @ts-ignore
+    quadTree.visit((quad, x1, y1, x2, y2) => {
+        if (!quad.length) {
+            var dx = quad.data.x - layerPoint.x;
+            var dy = quad.data.y - layerPoint.y;
+            var r = quad.data.scale.x * 16;
+            if (dx * dx + dy * dy <= r * r) {
+                marker = quad.data;
+                found = true;
+            }
+        }
+        return found || x1 > layerPoint.x + rMax || x2 + rMax < layerPoint.x || y1 > layerPoint.y + rMax || y2 + rMax < layerPoint.y;
+    });
+    return marker;
 }

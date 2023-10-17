@@ -26,11 +26,12 @@
 import { ref, computed, watchEffect } from 'vue'
 import { store } from '../store'
 import { 
-    drawCircle,
     removeSprite,
     setupClickListener,
-    removeClickListener
+    removeClickListener,
+    findMarker
 } from '../mapUtils'
+import { castleInstance } from '../client'
 import * as PIXI from 'pixi.js'
 
 const app = computed(() => store.pixiApp)
@@ -50,9 +51,16 @@ const clickedLatLng = ref<null | { lat: number, lng: number }>(null)
 let lastSprite: PIXI.Sprite | null = null
 
 const handleDraw = async () => {
-    const markerTexture = await PIXI.Assets.load('/images/marker.png');
-    const marker = PIXI.Sprite.from(markerTexture); 
-    drawCircle(store.utils, [lat.value, lng.value], 10)
+    const markerTexture = await PIXI.Assets.load('/images/castle_2.png');
+    const castle = PIXI.Sprite.from(markerTexture);
+
+    const castleData = {
+      name: 'Test Castle',
+      latLng: [lat.value, lng.value],
+      level: 10,
+      sprite: castle
+    }
+    castleInstance(store.utils, castleData)
 };
 
 const handleRemoveSprite = () => {
@@ -66,6 +74,9 @@ const handleClick = (latlng: { lat: number, lng: number }) => {
     clickedLatLng.value = latlng
     lat.value = latlng.lat
     lng.value = latlng.lng
+
+    // check if marker is clicked
+    const marker = findMarker(utils.value, [latlng.lat, latlng.lng])
 }
 
 const handleSetupClick = () => {
